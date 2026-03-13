@@ -1,0 +1,64 @@
+{
+    "configurations": [
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:BrightPass-Apple}",
+            "name": "Debug BrightPassmacOS",
+            "target": "BrightPassmacOS",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug BrightPassmacOS"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:BrightPass-Apple}",
+            "name": "Release BrightPassmacOS",
+            "target": "BrightPassmacOS",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release BrightPassmacOS"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:BrightPass-Apple}",
+            "name": "Debug BrightPassiOS",
+            "target": "BrightPassiOS",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug BrightPassiOS"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:BrightPass-Apple}",
+            "name": "Release BrightPassiOS",
+            "target": "BrightPassiOS",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release BrightPassiOS"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:BrightPass-Apple}",
+            "name": "Debug BrightPassAutoFill",
+            "target": "BrightPassAutoFill",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug BrightPassAutoFill"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:BrightPass-Apple}",
+            "name": "Release BrightPassAutoFill",
+            "target": "BrightPassAutoFill",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release BrightPassAutoFill"
+        }
+    ]
+}
