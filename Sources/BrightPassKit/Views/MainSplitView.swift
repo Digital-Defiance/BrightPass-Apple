@@ -17,6 +17,9 @@ public struct MainSplitView: View {
     @State private var columnVisibility: NavigationSplitViewVisibility = .all
     @State private var sortViewModel = EntrySortViewModel()
     @State private var showFavorites = false
+    @State private var showCreateSheet = false
+    @State private var newVaultName = ""
+    @State private var newVaultPassword = ""
 
     public init(router: NavigationRouter,
                 vaultListViewModel: VaultListViewModel,
@@ -69,7 +72,9 @@ public struct MainSplitView: View {
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
-                        // Trigger vault creation — delegate to VaultListView's create flow
+                        newVaultName = ""
+                        newVaultPassword = ""
+                        showCreateSheet = true
                     } label: {
                         Label("Create Vault", systemImage: "plus")
                     }
@@ -79,6 +84,20 @@ public struct MainSplitView: View {
             .task {
                 if vaultListViewModel.vaults.isEmpty {
                     await vaultListViewModel.loadVaults()
+                }
+            }
+            .sheet(isPresented: $showCreateSheet) {
+                CreateVaultSheet(
+                    name: $newVaultName,
+                    password: $newVaultPassword,
+                    isLoading: vaultListViewModel.isLoading
+                ) {
+                    Task {
+                        await vaultListViewModel.createVault(name: newVaultName, masterPassword: newVaultPassword)
+                        if vaultListViewModel.error == nil {
+                            showCreateSheet = false
+                        }
+                    }
                 }
             }
         } content: {
