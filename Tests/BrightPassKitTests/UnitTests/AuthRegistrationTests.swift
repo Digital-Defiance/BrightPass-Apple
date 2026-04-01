@@ -141,7 +141,7 @@ private func makeTestProfile(username: String = "testuser", memberId: String = "
 @available(macOS 14.0, iOS 17.0, *)
 private func makeTestChallenge() -> DirectLoginChallenge {
     DirectLoginChallenge(
-        challenge: "test-challenge-hex",
+        challenge: "aabbccdd00112233aabbccdd00112233aabbccdd00112233aabbccdd00112233",
         message: "Please sign",
         serverPublicKey: "server-pub-key-hex"
     )

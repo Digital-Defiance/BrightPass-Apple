@@ -66,10 +66,12 @@ final class MalformedJSONPropertyTests: XCTestCase {
         }
     }
 
-    // MARK: - EntryPropertyRecord (required: id, title, type, tags, isFavorite)
+    // MARK: - EntryPropertyRecord (required: title, entryType — uses custom CodingKeys)
+    // Note: id defaults to UUID, tags defaults to [], favorite defaults to false,
+    // so only title and entryType are truly required.
 
     func testEntryPropertyRecordMissingRequiredFields() {
-        let requiredKeys = ["id", "title", "type", "tags", "isFavorite"]
+        let requiredKeys = ["title", "entryType"]
         for key in requiredKeys {
             property("EntryPropertyRecord missing '\(key)' throws DecodingError") <- forAll { (value: EntryPropertyRecord) in
                 return assertMissingFieldThrowsDecodingError(value, removingKey: key, type: EntryPropertyRecord.self)

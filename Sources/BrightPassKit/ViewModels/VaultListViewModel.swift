@@ -10,6 +10,7 @@ public class VaultListViewModel {
     public var vaults: [VaultMetadata] = []
     public var isLoading: Bool = false
     public var error: AppError?
+    public var decryptedEntryCounts: [String: Int] = [:]
 
     private let apiClient: APIClientProtocol
 
@@ -49,9 +50,20 @@ public class VaultListViewModel {
         do {
             try await apiClient.deleteVault(id: vault.id)
             vaults.removeAll { $0.id == vault.id }
+            decryptedEntryCounts.removeValue(forKey: vault.id)
         } catch {
             self.error = ErrorMapper.map(error)
         }
         isLoading = false
+    }
+
+    /// Sets the client-side derived entry count for a decrypted vault.
+    public func setEntryCount(for vaultId: String, count: Int) {
+        decryptedEntryCounts[vaultId] = count
+    }
+
+    /// Clears the entry count for a vault (e.g. when it is locked).
+    public func clearEntryCount(for vaultId: String) {
+        decryptedEntryCounts.removeValue(forKey: vaultId)
     }
 }

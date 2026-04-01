@@ -14,7 +14,7 @@ import SwiftCheck
 private final class MockAPIClient: APIClientProtocol, @unchecked Sendable {
 
     func renameVault(id: String, name: String) async throws -> VaultMetadata {
-        VaultMetadata(id: id, name: name, entryCount: 0)
+        VaultMetadata(id: id, name: name)
     }
 
     func listVaults() async throws -> [VaultMetadata] { [] }
@@ -75,8 +75,7 @@ final class VaultRenameOptimisticPropertyTests: XCTestCase {
             for _ in 0..<count {
                 vaults.append(VaultMetadata(
                     id: UUID().uuidString,
-                    name: String.arbitrary.generate,
-                    entryCount: Int.random(in: 0...100)
+                    name: String.arbitrary.generate
                 ))
             }
 

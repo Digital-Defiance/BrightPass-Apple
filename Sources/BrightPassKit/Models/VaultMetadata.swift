@@ -3,7 +3,6 @@ import Foundation
 public struct VaultMetadata: Codable, Equatable, Hashable, Identifiable, Sendable {
     public let id: String
     public let name: String
-    public let entryCount: Int?
     public let ownerId: String?
     public let createdAt: String?
     public let updatedAt: String?
@@ -19,12 +18,11 @@ public struct VaultMetadata: Codable, Equatable, Hashable, Identifiable, Sendabl
         return Date()
     }
 
-    public init(id: String, name: String, entryCount: Int? = 0,
+    public init(id: String, name: String,
                 ownerId: String? = nil, createdAt: String? = nil, updatedAt: String? = nil,
                 sharedWith: [String]? = nil, vcblBlockId: String? = nil) {
         self.id = id
         self.name = name
-        self.entryCount = entryCount
         self.ownerId = ownerId
         self.createdAt = createdAt
         self.updatedAt = updatedAt

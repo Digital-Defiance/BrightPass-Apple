@@ -160,8 +160,7 @@ extension VaultMetadata: Arbitrary {
         Gen.compose { c in
             VaultMetadata(
                 id: c.generate(),
-                name: c.generate(),
-                entryCount: c.generate()
+                name: c.generate()
             )
         }
     }

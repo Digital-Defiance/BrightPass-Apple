@@ -23,6 +23,7 @@ private final class MockAPIClient: APIClientProtocol, @unchecked Sendable {
 
     var openVaultResult: DecryptedVault?
     var openVaultError: Error?
+    var listEntriesResult: [EntryPropertyRecord] = []
 
     func openVault(id: String, masterPassword: String) async throws -> DecryptedVault {
         if let err = openVaultError { throw err }
@@ -30,6 +31,10 @@ private final class MockAPIClient: APIClientProtocol, @unchecked Sendable {
             throw APIError(status: 500, code: "no_mock", message: "No mock vault", details: nil)
         }
         return result
+    }
+
+    func listEntries(vaultId: String) async throws -> [EntryPropertyRecord] {
+        return listEntriesResult
     }
 
     // Unused stubs
@@ -44,7 +49,6 @@ private final class MockAPIClient: APIClientProtocol, @unchecked Sendable {
     func createVault(name: String, masterPassword: String) async throws -> VaultMetadata { fatalError() }
     func deleteVault(id: String) async throws { fatalError() }
     func renameVault(id: String, name: String) async throws -> VaultMetadata { fatalError() }
-    func listEntries(vaultId: String) async throws -> [EntryPropertyRecord] { fatalError() }
     func getEntry(vaultId: String, entryId: String) async throws -> VaultEntry { fatalError() }
     func createEntry(vaultId: String, entry: VaultEntry) async throws -> VaultEntry { fatalError() }
     func updateEntry(vaultId: String, entryId: String, entry: VaultEntry) async throws -> VaultEntry { fatalError() }

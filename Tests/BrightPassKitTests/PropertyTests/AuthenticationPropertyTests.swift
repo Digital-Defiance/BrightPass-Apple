@@ -53,6 +53,11 @@ private let shortAlphaString: Gen<String> = Gen<Character>.fromElements(in: "a".
     .suchThat { !$0.isEmpty }
     .map { String($0.prefix(max(1, Int.random(in: 3...10)))) }
 
+/// Generates a valid hex string of 32 bytes (64 hex chars) for use as a challenge.
+private let hexChallengeGen: Gen<String> = Gen.compose { c in
+    (0..<32).map { _ in String(format: "%02x", UInt8.random(in: 0...255)) }.joined()
+}
+
 /// Generates a JWT-like token string (three dot-separated base64 segments).
 private let jwtTokenGen: Gen<String> = Gen.compose { c in
     let seg1 = c.generate(using: shortAlphaString)
@@ -165,7 +170,7 @@ final class AuthenticationPropertyTests: XCTestCase {
             }
 
             let challenge = DirectLoginChallenge(
-                challenge: "test-challenge-hex-\(i)",
+                challenge: hexChallengeGen.generate,
                 message: "Please sign",
                 serverPublicKey: "server-pub-key-hex"
             )
@@ -245,7 +250,7 @@ final class AuthenticationPropertyTests: XCTestCase {
             }
 
             let challenge = DirectLoginChallenge(
-                challenge: "challenge-\(i)",
+                challenge: hexChallengeGen.generate,
                 message: "Please sign",
                 serverPublicKey: "server-pub-key-hex"
             )

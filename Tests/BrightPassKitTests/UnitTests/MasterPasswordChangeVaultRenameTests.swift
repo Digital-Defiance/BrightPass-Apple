@@ -24,7 +24,7 @@ private final class MockAPIClient: APIClientProtocol, @unchecked Sendable {
         renameVaultCalled = true
         if let err = renameVaultError { throw err }
         if let result = renameVaultResult { return result }
-        return VaultMetadata(id: id, name: name, entryCount: 0)
+        return VaultMetadata(id: id, name: name)
     }
 
     func listVaults() async throws -> [VaultMetadata] { [] }
@@ -159,7 +159,7 @@ final class VaultRenameTests: XCTestCase {
 
         let listVM = VaultListViewModel(apiClient: mock)
         listVM.vaults = [
-            VaultMetadata(id: "v1", name: "Old Name", entryCount: 5)
+            VaultMetadata(id: "v1", name: "Old Name")
         ]
 
         let detailVM = VaultDetailViewModel(apiClient: mock, keychainStore: keychain)
@@ -202,9 +202,9 @@ final class VaultRenameTests: XCTestCase {
 
         let listVM = VaultListViewModel(apiClient: mock)
         listVM.vaults = [
-            VaultMetadata(id: "v1", name: "Vault A", entryCount: 3),
-            VaultMetadata(id: "v2", name: "Vault B", entryCount: 7),
-            VaultMetadata(id: "v3", name: "Vault C", entryCount: 1),
+            VaultMetadata(id: "v1", name: "Vault A"),
+            VaultMetadata(id: "v2", name: "Vault B"),
+            VaultMetadata(id: "v3", name: "Vault C"),
         ]
 
         let renameVM = VaultRenameViewModel(apiClient: mock)

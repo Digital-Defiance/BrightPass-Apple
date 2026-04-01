@@ -39,7 +39,7 @@ final class APIClientPropertyTests: XCTestCase {
             // Store the JWT
             try! self.mockKeychain.saveJWT(token)
 
-            // Stub a 200 response with valid JSON for listVaults
+            // Stub a 200 response with valid BPResponse<VaultListData> JSON for listVaults
             MockURLProtocol.capturedRequests = []
             MockURLProtocol.requestHandler = { request in
                 let response = HTTPURLResponse(
@@ -48,7 +48,11 @@ final class APIClientPropertyTests: XCTestCase {
                     httpVersion: nil,
                     headerFields: nil
                 )!
-                let body = try! JSONCoding.encoder.encode([VaultMetadata]())
+                let wrapper: [String: Any] = [
+                    "success": true,
+                    "data": ["vaults": [] as [[String: Any]]]
+                ]
+                let body = try! JSONSerialization.data(withJSONObject: wrapper)
                 return (response, body)
             }
 
@@ -86,7 +90,11 @@ final class APIClientPropertyTests: XCTestCase {
                 httpVersion: nil,
                 headerFields: nil
             )!
-            let body = try! JSONCoding.encoder.encode([VaultMetadata]())
+            let wrapper: [String: Any] = [
+                "success": true,
+                "data": ["vaults": [] as [[String: Any]]]
+            ]
+            let body = try! JSONSerialization.data(withJSONObject: wrapper)
             return (response, body)
         }
 

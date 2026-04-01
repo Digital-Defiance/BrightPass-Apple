@@ -50,7 +50,7 @@ public struct MainSplitView: View {
                             router.navigateToVault(vault.id)
                             showMasterPasswordPrompt = true
                         } label: {
-                            VaultRowView(vault: vault)
+                            VaultRowView(vault: vault, entryCount: vaultListViewModel.decryptedEntryCounts[vault.id])
                         }
                         .buttonStyle(.plain)
                     }

@@ -4,15 +4,25 @@ import SwiftUI
 @available(macOS 14.0, iOS 17.0, *)
 struct VaultRowView: View {
     let vault: VaultMetadata
+    let entryCount: Int?  // nil = locked, non-nil = client-derived count
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(vault.name)
                 .font(.headline)
             HStack {
-                Text("\(vault.entryCount ?? 0) entries")
+                if let entryCount = entryCount {
+                    Text("\(entryCount) entries")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                } else {
+                    HStack(spacing: 4) {
+                        Image(systemName: "lock.fill")
+                        Text("Locked")
+                    }
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
+                }
                 Spacer()
                 Text(vault.lastModified, style: .relative)
                     .font(.caption)
@@ -21,7 +31,7 @@ struct VaultRowView: View {
         }
         .padding(.vertical, 4)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(vault.name), \(vault.entryCount ?? 0) entries")
+        .accessibilityLabel(entryCount != nil ? "\(vault.name), \(entryCount!) entries" : "\(vault.name), Locked")
     }
 }
 
@@ -50,7 +60,7 @@ public struct VaultListView: View {
                 Button {
                     onSelectVault(vault)
                 } label: {
-                    VaultRowView(vault: vault)
+                    VaultRowView(vault: vault, entryCount: viewModel.decryptedEntryCounts[vault.id])
                 }
                 #if os(iOS)
                 .swipeActions(edge: .trailing, allowsFullSwipe: false) {

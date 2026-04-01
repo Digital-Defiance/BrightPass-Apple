@@ -19,8 +19,7 @@ private final class MockAPIClient: APIClientProtocol, @unchecked Sendable {
     func createVault(name: String, masterPassword: String) async throws -> VaultMetadata {
         VaultMetadata(
             id: UUID().uuidString,
-            name: name,
-            entryCount: 0
+            name: name
         )
     }
 
@@ -83,8 +82,7 @@ private let uniqueVaultList: Gen<[VaultMetadata]> = Gen.compose { c in
         usedIds.insert(id)
         vaults.append(VaultMetadata(
             id: id,
-            name: c.generate(),
-            entryCount: abs(c.generate(using: Int.arbitrary)) % 1000
+            name: c.generate()
         ))
     }
     return vaults

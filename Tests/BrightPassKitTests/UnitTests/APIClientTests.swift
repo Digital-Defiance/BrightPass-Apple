@@ -67,17 +67,26 @@ final class APIClientTests: XCTestCase {
 
     // MARK: - Base URL Configuration
 
+    /// Helper: builds a valid BPResponse<VaultListData> JSON body for mock responses.
+    private func vaultListResponseBody(_ vaults: [[String: Any]] = []) -> Data {
+        let wrapper: [String: Any] = [
+            "success": true,
+            "data": ["vaults": vaults]
+        ]
+        return try! JSONSerialization.data(withJSONObject: wrapper)
+    }
+
     /// Development environment uses localhost:8080.
     func testDevelopmentBaseURL() async throws {
         MockURLProtocol.capturedRequests = []
-        MockURLProtocol.requestHandler = { request in
+        MockURLProtocol.requestHandler = { [self] request in
             let response = HTTPURLResponse(
                 url: request.url!,
                 statusCode: 200,
                 httpVersion: nil,
                 headerFields: nil
             )!
-            return (response, try! JSONCoding.encoder.encode([VaultMetadata]()))
+            return (response, vaultListResponseBody())
         }
 
         let client = makeClient(environment: .development)
@@ -88,20 +97,20 @@ final class APIClientTests: XCTestCase {
             return
         }
         XCTAssertEqual(url.host, "localhost")
-        XCTAssertEqual(url.port, 8080)
+        XCTAssertEqual(url.port, 3000)
     }
 
     /// Production environment uses brightchain.org.
     func testProductionBaseURL() async throws {
         MockURLProtocol.capturedRequests = []
-        MockURLProtocol.requestHandler = { request in
+        MockURLProtocol.requestHandler = { [self] request in
             let response = HTTPURLResponse(
                 url: request.url!,
                 statusCode: 200,
                 httpVersion: nil,
                 headerFields: nil
             )!
-            return (response, try! JSONCoding.encoder.encode([VaultMetadata]()))
+            return (response, vaultListResponseBody())
         }
 
         let client = makeClient(environment: .production)
@@ -174,14 +183,14 @@ final class APIClientTests: XCTestCase {
     /// Every request sets Content-Type to application/json.
     func testContentTypeHeader() async throws {
         MockURLProtocol.capturedRequests = []
-        MockURLProtocol.requestHandler = { request in
+        MockURLProtocol.requestHandler = { [self] request in
             let response = HTTPURLResponse(
                 url: request.url!,
                 statusCode: 200,
                 httpVersion: nil,
                 headerFields: nil
             )!
-            return (response, try! JSONCoding.encoder.encode([VaultMetadata]()))
+            return (response, vaultListResponseBody())
         }
 
         let client = makeClient()
@@ -199,7 +208,7 @@ final class APIClientTests: XCTestCase {
     /// A valid 200 response with correct JSON decodes successfully.
     func testSuccessfulDecode() async throws {
         let expected = [
-            VaultMetadata(id: "v1", name: "Personal", entryCount: 5)
+            VaultMetadata(id: "v1", name: "Personal")
         ]
 
         MockURLProtocol.requestHandler = { request in
@@ -222,7 +231,7 @@ final class APIClientTests: XCTestCase {
         XCTAssertEqual(result.count, 1)
         XCTAssertEqual(result.first?.id, "v1")
         XCTAssertEqual(result.first?.name, "Personal")
-        XCTAssertEqual(result.first?.entryCount, 5)
+        // entryCount removed from VaultMetadata — server field is silently ignored
     }
 
     // MARK: - Network Timeout
